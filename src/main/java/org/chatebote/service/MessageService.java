@@ -15,10 +15,11 @@ public class MessageService {
     }
 
     /**
-     * This methods send given question to the AI model and returns the answer.
+     * This method sends given question to the AI model and returns the answer.
      * @param question Question to the AI as string.
      * @return The answer AI gave as string.
      */
+    @SuppressWarnings("unchecked")
     public String ask(String question) {
         Genson genson = new Genson();
         Map<String, Object> payload = Map.of(
@@ -46,11 +47,12 @@ public class MessageService {
         } catch (IOException | InterruptedException e) {
             System.out.println(e);
         }
+        client.close();
 
         if(response != null) {
             Map<String, Object> json_obj = genson.deserialize(response.body(), Map.class);
             List<Map<String, Object>> choices = (List<Map<String, Object>>) json_obj.get("choices");
-            Map<String, Object> message = (Map<String, Object>) choices.get(0).get("message");
+            Map<String, Object> message = (Map<String, Object>) choices.getFirst().get("message");
             return (String)message.get("content");
         } else {
             return "Error!";

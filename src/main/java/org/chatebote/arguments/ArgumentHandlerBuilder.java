@@ -2,7 +2,7 @@ package org.chatebote.arguments;
 
 public final class ArgumentHandlerBuilder {
     // Must be non-null when 'build()' is called.
-    // Update #build when addding/removing values.
+    // Update #build when adding/removing values.
     private XUI gui, tui, singleGui, singleTui;
 
     public ArgumentHandlerBuilder setGui(XUI xui) {

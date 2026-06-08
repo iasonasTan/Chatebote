@@ -1,78 +1,48 @@
 package org.chatebote.xui.tui;
 
 import org.chatebote.arguments.XUI;
-import org.chatebote.service.StorableMessageService;
 import org.chatebote.service.MessageService;
+import org.chatebote.service.StorableMessageService;
 
-import java.util.Scanner;
 import java.time.LocalDateTime;
-import java.io.FileWriter;
-import java.io.BufferedWriter;
-import java.io.IOException;
+import java.util.Scanner;
 
 public final class TUI_Service implements XUI {
+    // ATTENTION: This method can terminate the application.
     @Override
-    public void start(MessageService msgs) {
-        StorableMessageService messageService = (StorableMessageService)msgs;
+    public void start(MessageService ms) {
+        StorableMessageService messageService = (StorableMessageService)ms;
         greet();
         Scanner scanner = new Scanner(System.in);
-        String line = null;
+        String line;
+        label:
         while(true) {
             System.out.print("Ask anything: ");
             line = scanner.nextLine();
-            if(line.equals("@forget")) {
-                messageService.clearHistory();
-                System.out.println("Memory cleared!");
-                continue;
-            }
-            if(line.equals("@exit")) {
-                System.out.println("Goodbye!");
-                System.exit(0);
-                break;
-            }
-            if (line.equals("@save")) {
-                String dateTimeStr = LocalDateTime.now().toString();
-                String fileName = String.format("Conversation-%s.txt",dateTimeStr);
-                messageService.storeHere(fileName);
-                System.out.println("Chat Saved!");
-                continue;
+            switch (line) {
+                case "@forget":
+                    messageService.clearHistory();
+                    System.out.println("Memory cleared!");
+                    continue;
+                case "@exit":
+                    System.out.println("Goodbye!");
+                    System.exit(0);
+                    break label;
+                case "@save":
+                    String dateTimeStr = LocalDateTime.now().toString();
+                    String fileName = String.format("Conversation-%s.txt", dateTimeStr);
+                    messageService.storeHere(fileName);
+                    System.out.println("Chat Saved!");
+                    continue;
             }
             String response = messageService.ask(line);
-            printResp(response);
+            IO.println(TUI_Utils.boxText(response));
         }
-    }
-
-    private static void printResp(String resp) {
-        final int LINE_WIDTH = 46;
-        StringBuilder msgBuilder = new StringBuilder();
-        
-        msgBuilder.append("#".repeat(LINE_WIDTH)).append('\n');
-
-        String[] words = resp.split(" ");
-        msgBuilder.append("# ");
-        int lineWidth = 2;
-
-        for(String word: words) {
-            if(lineWidth+word.length()+1 > LINE_WIDTH-1) {
-                msgBuilder.append(" ".repeat(LINE_WIDTH-1-lineWidth))
-                        .append("#\n# ");
-                lineWidth = 2;
-            }
-            
-            msgBuilder.append(word).append(' ');
-            lineWidth += word.length() + 1;
-        }
-
-        msgBuilder.append(" ".repeat(LINE_WIDTH - 1 - lineWidth))
-                .append("#\n");
-        
-        msgBuilder.append("#".repeat(LINE_WIDTH)).append('\n');
-        System.out.println(msgBuilder);
     }
 
     private static void greet() {
-        System.out.println("Type @forget to forget everything.");
-        System.out.println("Type @exit to stop app.");
-        System.out.println("Type @save to save current conversation in a file.");
+        IO.println("Type @forget to forget everything.");
+        IO.println("Type @exit to stop app.");
+        IO.println("Type @save to save current conversation in a file.");
     }
 }

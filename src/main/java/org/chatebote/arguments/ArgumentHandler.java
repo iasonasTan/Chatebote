@@ -21,7 +21,7 @@ public final class ArgumentHandler {
     }
 
     /**
-     * Checks if the given array is a set of valid program paraemters.
+     * Checks if the given array is a set of valid program parameters.
      * @param args Set of program parameters to check.
      * @return True if given string array is a valid set
      * of program parameters, false otherwise.
@@ -52,14 +52,14 @@ public final class ArgumentHandler {
             case CHAT_TYPE_TUI -> mTui.start(messageService);
             case CHAT_TYPE_SINGLE_GUI -> mSingleGui.start(messageService);
             case CHAT_TYPE_SINGLE_TUI -> mSingleTui.start(messageService);
-            default -> System.out.println("A serious error occured.");
+            default -> System.out.println("A serious error occurred.");
         }
     }
 
     // ATTENTION: this method terminates the application.
     private void handleInvalid(String[] args) {
-        String argss = List.of(args).toString();
-        System.out.println("ERROR: Invalid arguments "+argss+".");
+        String argsText = List.of(args).toString();
+        System.out.println("ERROR: Invalid arguments "+argsText+".");
         System.out.println("ERROR: These are the valid options: "+List.of(CHAT_TYPE_GUI, CHAT_TYPE_TUI, CHAT_TYPE_SINGLE_GUI, CHAT_TYPE_SINGLE_TUI));
         System.exit(1);
     }
