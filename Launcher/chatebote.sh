@@ -1,2 +1,3 @@
 #!/bin/bash
-java -jar ../build/libs/Chatebote.jar $1
+
+xfce4-terminal -x java -jar ../build/libs/Chatebote.jar "$1"
