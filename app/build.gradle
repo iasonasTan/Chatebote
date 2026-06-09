@@ -9,9 +9,9 @@ repositories {
 dependencies {
     implementation libs.guava
     implementation 'com.owlike:genson:1.6'
-    implementation files('libs/jelib-core.jar')
-    implementation files('libs/jelib-gui.jar')
-    implementation files('libs/jelib-io.jar')
+    implementation files('../libs/jelib-core.jar')
+    implementation files('../libs/jelib-gui.jar')
+    implementation files('../libs/jelib-io.jar')
     testImplementation libs.junit
 }
 
@@ -23,6 +23,7 @@ jar {
         configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
     }
     duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+    archiveBaseName    = 'Chatebote'
 }
 
 java {

@@ -20,6 +20,7 @@ public class MessageService {
      * @param question Question to the AI as string.
      * @return The answer AI gave as string.
      */
+    @SuppressWarnings("unchecked")
     public String ask(String question) {
         Genson genson = new Genson();
         Map<String, Object> payload = Map.of(
@@ -41,7 +42,7 @@ public class MessageService {
         HttpResponse<String> response = null;
         try {
             response = client.send(
-                request, 
+                request,
                 HttpResponse.BodyHandlers.ofString()
             );
         } catch (IOException | InterruptedException e) {
