@@ -35,8 +35,8 @@ public final class TUI_Service implements XUI {
                     System.out.println("Chat Saved!");
                     continue;
             }
-            String response = messageService.ask(line);
-            IO.println(TUI_Utils.boxText(response));
+            String reply = messageService.ask(line);
+            IO.println(TUI_Utils.boxText(reply));
         }
     }
 

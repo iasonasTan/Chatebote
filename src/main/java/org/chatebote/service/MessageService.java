@@ -6,6 +6,7 @@ import com.owlike.genson.Genson;
 import java.util.Map;
 import java.util.List;
 import java.io.IOException;
+import java.util.function.Consumer;
 
 public class MessageService {
     private final String API_KEY;
@@ -19,7 +20,6 @@ public class MessageService {
      * @param question Question to the AI as string.
      * @return The answer AI gave as string.
      */
-    @SuppressWarnings("unchecked")
     public String ask(String question) {
         Genson genson = new Genson();
         Map<String, Object> payload = Map.of(
@@ -59,4 +59,15 @@ public class MessageService {
         }
     }
 
+    /**
+     * This method asks AI the given question in the 
+     * background and invokes onReceive when it replies.
+     * @param question question to ask the model
+     * @param onReceive consumer to invoke when AI replies
+     */
+    public final void askAsync(final String question, final Consumer<String> onReceive) {
+        new Thread(() -> {
+            onReceive.accept(ask(question));
+        }).start();
+    }
 }
