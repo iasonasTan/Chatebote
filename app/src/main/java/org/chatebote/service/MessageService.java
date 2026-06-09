@@ -1,5 +1,6 @@
 package org.chatebote.service;
 
+import com.je.core.JeLib;
 import java.net.http.*;
 import java.net.URI;
 import com.owlike.genson.Genson;
@@ -13,6 +14,11 @@ public class MessageService {
 
     public MessageService() {
         API_KEY = System.getenv("GROQ_API_KEY");
+        JeLib.console().log(
+            API_KEY == null ?
+            "Failed to load GROQ_API_KEY." :
+            "GROQ_API_KEY loaded successfuly!"
+        );
     }
 
     /**
@@ -51,6 +57,7 @@ public class MessageService {
         client.close();
 
         if(response != null) {
+            JeLib.console().log("Response: " + response.body());
             Map<String, Object> json_obj = genson.deserialize(response.body(), Map.class);
             List<Map<String, Object>> choices = (List<Map<String, Object>>) json_obj.get("choices");
             Map<String, Object> message = (Map<String, Object>) choices.getFirst().get("message");
