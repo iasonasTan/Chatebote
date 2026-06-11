@@ -5,6 +5,7 @@ import com.je.gui.AbstractScreen;
 import com.je.gui.component.*;
 import com.je.gui.layout.VerticalFlowLayout;
 import org.chatebote.service.MessageService;
+import org.chatebote.service.StorableMessageService;
 
 import javax.swing.*;
 import java.awt.*;
@@ -12,9 +13,9 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.time.LocalDateTime;
 
 public class MainScreen extends AbstractScreen {
-    private final OnSendListener mOnSendListener;
     private final JeButton mSendButton;
 
     public MainScreen(JeGuiBuilder builder, MessageService messageService) {
@@ -36,15 +37,26 @@ public class MainScreen extends AbstractScreen {
         JeInput input = builder.createComponent(JeInput.class).orElseThrow(RuntimeException::new);
 
         input.setForeground(Color.WHITE);
-        input.setPreferredSize(new Dimension(500, 60));
+        input.setPreferredSize(new Dimension(400, 60));
 
-        mOnSendListener = new OnSendListener(builder, messagesSection, input, messageService);
+        OnSendListener mOnSendListener = new OnSendListener(builder, messagesSection, input, messageService);
         mSendButton.addActionListener(mOnSendListener);
         input.addKeyListener(mOnSendListener);
 
+        final StorableMessageService storableMessageService = (StorableMessageService)messageService;
+
+        JeButton saveConvoButton = builder.createTextComponent(JeButton.class, "Save").orElseThrow(RuntimeException::new);
+        saveConvoButton.addActionListener(_ -> {
+            String dateTimeStr = LocalDateTime.now().toString();
+            String fileName = String.format("Conversation-%s.txt", dateTimeStr);
+            storableMessageService.storeHere(fileName);
+        });
+
+        JeButton forgetConvoButton = builder.createTextComponent(JeButton.class, "Forget").orElseThrow(RuntimeException::new);
+        forgetConvoButton.addActionListener(_ -> storableMessageService.clearHistory());
+
         JeSection buttonsSection = builder.createSection(new FlowLayout());
-        buttonsSection.add(input);
-        buttonsSection.add(mSendButton);
+        buttonsSection.addChildren(input, mSendButton, saveConvoButton, forgetConvoButton);
 
         mainSection.add(buttonsSection);
         mainSection.add(messagesScrollPane);

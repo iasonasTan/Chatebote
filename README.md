@@ -27,7 +27,7 @@ java -jar build/libs/Chatebote.jar [option]
 ## Launcher
 The app cotains a D launcher.
 This is very useful when you want to test all the four modes of the 
-app but you don't want to edit configuration options in your IDE.
+app, but you don't want to edit configuration options in your IDE.
 The launcher needs a file called chatebote.sh/.bat, this file is a script that tell how the app will start.
 From there, you can start a terminal to see the logs etc.
 To use it you can:
